@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--
+  http://www.htmldog.com/articles/suckerfish/dropdowns/example/
+  modified by Vladimir Gendel aka s60team
+ -->
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>Suckerfish Dropdowns - Perciformes!</title>
+
+<style type="text/css">
+*{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+body {
+  font:16px Tahoma,sans-serif;
+  padding: 0;
+  margin: 0;
+}
+#nav ul,#nav{-webkit-margin-before: 0;-webkit-margin-after: 0;-webkit-padding-start: 0;}
+
+#nav, #nav ul {
+  float: left;
+  list-style: none;
+  line-height: 1;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+.nav #nav{width:100%;}
+#nav a {
+  display: block;
+  color: #7C6240;
+  text-decoration: none;
+  padding: 15px;
+}
+#nav .open a{margin: 0 32px 0 0;_margin: 0 16px 0 0;}
+#nav ul a{width: 186px;_width: 186px;}
+#nav .open{
+  background: #283593 url("a1.gif") no-repeat right center;
+  _background: #283593 url("a1.gif") no-repeat right center;
+}
+#nav .open:hover, #nav .open:focus{
+  background: #283593 url("a1.gif") no-repeat right center;
+}
+[data-focus='true'] #nav .open:focus-within{
+  background: #283593 url("a1.gif") no-repeat right center;
+}
+#nav li:hover{cursor: pointer;}
+#nav li,#nav{background: #283593;}
+#nav li a{color:#fff;}
+#nav li {
+  float: left;
+  padding: 0;
+}
+#nav ul li{width: 218px;}
+#nav li ul {
+  position: absolute;
+  left: -999em;
+  height: auto;
+  width: 218px;
+  font-weight: normal;
+  margin: 0;
+}
+#nav li ul ul {
+  margin: -46px 0 0 218px;
+  _margin: -46px 0 0 232px; /* 236 */
+}
+#nav li ul ul ul {
+  margin: -46px 0 0 218px;
+  _margin: -46px 0 0 232px; /* 236 */
+}
+#nav li:hover ul ul, #nav li:hover ul ul ul, #nav li:hover ul ul ul ul,
+#nav li.sfhover ul ul, #nav li.sfhover ul ul ul, #nav li.sfhover ul ul ul ul{
+  left: -999em;
+}
+[data-focus='true'] #nav li:focus-within ul ul,
+[data-focus='true'] #nav li:focus-within ul ul ul,
+[data-focus='true'] #nav li:focus-within ul ul ul ul{
+   left: -999em;
+}
+#nav li:hover ul, #nav li li:hover ul, #nav li li li:hover ul, #nav li li li li:hover ul,
+#nav li.sfhover ul, #nav li li.sfhover ul, #nav li li li.sfhover ul, #nav li li li li.sfhover ul{
+  left: auto;
+}
+[data-focus='true'] #nav li:focus-within ul,
+[data-focus='true'] #nav li li:focus-within ul,
+[data-focus='true'] #nav li li li:focus-within ul,
+[data-focus='true'] #nav li li li li:focus-within ul{
+  left: auto;
+}
+#nav li.sfhover,#nav li:hover{background: #3f51b5}
+[data-focus='true'] #nav li:focus-within{background: #3f51b5}
+#nav li .open:hover,#nav li .open:focus,
+#nav .open:hover,#nav .open:focus {
+  background: #3f51b5 url("a1.gif") no-repeat right center;
+}
+[data-focus='true'] #nav .open:focus:focus-within{
+  background: #3f51b5 url("a1.gif") no-repeat right center;
+}
+
+@media all and (max-width: 998px){
+  #nav li,#nav, #nav ul{float:none}
+  #nav li ul {position: static;left: 0;}
+  /*#nav ul a, #nav ul li, #nav li ul,#nav ul a{width: auto;}*/
+  #nav ul a, #nav ul li, #nav li ul,#nav ul a{width: 100%;}
+  #nav li ul ul,#nav li ul ul ul{margin: auto;}
+  #nav li:hover ul, #nav li li:hover ul,
+  #nav li li li:hover ul, #nav li li li li:hover ul,
+  #nav li.sfhover ul, #nav li li.sfhover ul,
+  #nav li li li.sfhover ul, #nav li li li li.sfhover ul{width: 100%;}
+  #nav li.open{background: #283593 url("a1.gif") no-repeat right top !important;}
+  #nav ul li.open{background: #303F9F url("a1.gif") no-repeat right top !important;}
+  #nav ul ul li.open{background: #3949AB url("a1.gif") no-repeat right top !important;}
+  #nav ul ul ul li.open{background: #3F51B5 url("a1.gif") no-repeat right top !important;}
+  #nav ul ul ul ul li.open{background: #4E60C4 url("a1.gif") no-repeat right top !important;}
+  #nav ul ul ul ul ul li.open{background: #5C6ED2 url("a1.gif") no-repeat right top !important;}
+  #nav li{background: #283593}
+  #nav ul li{background: #303F9F !important}
+  #nav ul ul li{background: #3949AB !important}
+  #nav ul ul ul li{background: #3F51B5 !important}
+  #nav ul ul ul ul li{background: #4E60C4 !important}
+  #nav ul ul ul ul ul li{background: #5C6ED2 !important}
+}
+@media all and (min-width: 998px){
+  @keyframes showNav{from{opacity: 0;}to{opacity: 1;}}
+  @-webkit-keyframes showNav{from{opacity: 0;}to{opacity: 1;}}
+  #nav li:hover > ul {animation: showNav 250ms ease-in-out both;-webkit-animation: showNav 250ms ease-in-out both;}
+  [data-focus='true'] #nav li:focus-within > ul {animation: showNav 250ms ease-in-out both;-webkit-animation: showNav 250ms ease-in-out both;}
+}
+</style>
+
+<script type="text/javascript">
+// Perciformes IE6 Menu Fix:
+var sfHover=function(){var sfEls=document.getElementById("nav").getElementsByTagName("LI");
+for(var i=0;i<sfEls.length;i++){
+  sfEls[i].onmouseover=function(){this.className+=" sfhover";};
+  sfEls[i].onmouseout=function(){this.className=this.className.replace(new RegExp(" sfhover\\b"),"");};
+  //sfEls[i].onfocusin=function(){this.className+=" sfhover";};
+  //sfEls[i].onfocusout=function(){this.className=this.className.replace(new RegExp(" sfhover\\b"),"");};
+}};
+if(window.attachEvent){window.attachEvent("onload",sfHover);}
+// :focus-within
+try{
+  document.querySelector(':focus-within');
+  document.getElementsByTagName('html')[0].setAttribute('data-focus','true');
+} catch(e){
+  document.getElementsByTagName('html')[0].setAttribute('data-focus','false');
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="nav">
+<ul id="nav" role="navigation">
+  <li class="current"><a href="#home">Home</a></li>
+  <li class="open"><a href="#MyProjects">My Projects</a>
+    <ul>
+      <li class="open"><a href="#Design">N.Design Studio</a>
+        <ul>
+          <li><a href="#Portfolio">Portfolio</a></li>
+          <li><a href="#WPThemes">WordPress Themes</a></li>
+          <li><a href="#Wallpapers">Wallpapers</a></li>
+          <li><a href="#IllTutorials">Illustrator Tutorials</a></li>
+        </ul>
+      </li>
+      <li class="open"><a href="#WDW">Web Designer Wall</a>
+        <ul>
+          <li><a href="#DJW">Design Job Wall</a></li>
+        </ul>
+      </li>
+      <li><a href="#IconDock">IconDock</a></li>
+      <li><a href="#BGallery">Best Web Gallery</a></li>
+    </ul>
+  </li>
+  <li class="open"><a href="#MLevels">Multi-Levels</a>
+    <ul>
+      <li class="open"><a href="#Team">Team</a>
+        <ul>
+          <li><a href="#SL1">Sub-Level Item 1</a></li>
+          <li class="open"><a href="#SL2">Sub-Level Item 2</a>
+            <ul>
+              <li><a href="#SL21">Sub-Level Item 2.1</a></li>
+              <li class="open"><a href="#SL22">Sub-Level Item 2.2: This contains 4 subitems</a>
+                <ul>
+                  <li><a href="#SL221">Sub-Level Item 2.2.1</a></li>
+                  <li><a href="#SL222">Sub-Level Item 2.2.2</a></li>
+                  <li><a href="#SL223">Sub-Level Item 2.2.3</a></li>
+                  <li><a href="#SL224">Sub-Level Item 2.2.4</a></li>
+                </ul>
+              </li>
+              <li><a href="#SL23">Sub-Level Item 2.3</a></li>
+            </ul>
+          </li>
+          <li><a href="#SL3">Sub-Level Item 3</a></li>
+        </ul>
+      </li>
+      <li><a href="#Sales">Sales</a></li>
+      <li><a href="#Another">Another Link</a></li>
+      <li class="open"><a href="#Department">Department</a>
+        <ul>
+          <li><a href="#SLL1">Sub-Level Item 1</a></li>
+          <li><a href="#SLL2">Sub-Level Item 2</a></li>
+          <li><a href="#SLL3">Sub-Level Item 3</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#About">About</a></li>
+  <li><a href="#Contact">Contact Us</a></li>
+</ul>
+<div style="clear:both"></div>
+</div>
+
+
+
+<br /><br />
+<p>&nbsp; <a href="http://www.htmldog.com/articles/suckerfish/dropdowns/">article in HTML Dog</a></p>
+<br />
+<p>&nbsp; If browser supports <code>:focus-within</code>, navigation items will be viewable by Tabbing:<br />
+&nbsp; &nbsp; Chrome 60, Edge 79, Firefox 52, Safari 10.1 (iOS 10.3)</p>
+<br /><br />
+</body>
+</html>

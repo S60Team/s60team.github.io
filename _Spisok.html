@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<!--
+ PHP:
+/*
+  // Найти текст в строке после x
+  if( ($a_pos = strpos($str, 'x')) !== FALSE ){
+    $str = substr($str, $a_pos + 1);
+  }
+  // или (медленнее):
+  if (($tmp = strstr($str, 'x')) !== false) { $str = substr($tmp, 1); }
+  // без x:
+  if(strpos($str, 'x') !== FALSE ){ $str = substr(strstr($str, 'x'), 1); }
+  // на крайний случай:
+  str_replace(substr($str, 0, strpos($str, 'x')) . 'x', '', $str);
+*/
+-->
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Список-содержание</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width"/>
+  <meta name="description" content="Список-каталог нужных страниц, чтобы не искать, если забыл."/>
+  <link rel="shortcut icon" href="spisok.ico"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="img/paper_192x192.png"/>
+  <link rel="icon" type="image/jpeg" sizes="192x192" href="img/paper_192x192.png"/>
+  <meta name="msapplication-TileImage" content="img/win8-tile-144.png"/>
+  <meta name="msapplication-TileColor" content="#FFFFFF"/>
+  <script>
+    function touch() {
+      try{
+        if(navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0){
+          return 'Tach'; } else { return 'nTach'; }
+      } catch(e){
+        try{
+          if (
+              'ontouchstart' in window || 'createTouch' in document ||
+              window.DocumentTouch && document instanceof DocumentTouch
+            ) {
+            return 'Tach'; } else { return 'nTach'; }
+        }catch(e){ return 'nTach'; }
+      }
+    }
+    document.getElementsByTagName('html')[0].setAttribute("class", touch());
+  </script>
+  <style type="text/css">
+    /* spell-checker:disable */
+
+    /*
+      https://piccalil.li/blog/a-modern-css-reset
+    */
+    /* Box sizing rules */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    /* Remove default margin */
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    figure,
+    blockquote,
+    dl,
+    dd {
+      margin: 0;
+    }
+
+    /*
+      Remove list styles on ul, ol elements with a list role,
+       which suggests default styling will be removed
+    */
+    ul[role='list'],
+    ol[role='list'] {
+      list-style: none;
+    }
+
+    /* Set core root defaults */
+    html:focus-within {
+      scroll-behavior: smooth;
+    }
+
+    /* Set core body defaults */
+    body {
+      min-height: 100vh;
+      text-rendering: optimizeSpeed;
+      line-height: 1.5;
+    }
+
+    /* A elements that don't have a class get default styles */
+    a:not([class]) {
+      text-decoration-skip-ink: auto;
+    }
+
+    /* Make images easier to work with 
+    img,
+    picture {
+      max-width: 100%;
+      display: block;
+    }*/
+
+    /* Inherit fonts for inputs and buttons */
+    input,
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    /*
+      Remove all animations, transitions and smooth scroll
+       for people that prefer not to see them
+    */
+    @media (prefers-reduced-motion: reduce) {
+      html:focus-within {
+       scroll-behavior: auto;
+      }
+      
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    
+    body{
+      font-family: "Roboto","Ubuntu","Segoe UI","Helvetica Neue",
+        "Noto Sans","Liberation Sans",Arial, sans-serif,"Apple Color Emoji",
+        "Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+    }
+    /*@media (prefers-reduced-data: reduce){body{background-color: red;}}*/
+    @media (prefers-reduced-data: reduce) {
+      abbr{font-style: italic;}
+    }
+    /* abbr styling: */
+    .Tach abbr[data-title] {
+      position: relative;
+      border-bottom: 1px dotted;
+    }
+    .Tach abbr[data-title]:hover::after,
+    .Tach abbr[data-title]:focus::after {
+      content: attr(data-title);
+      position: absolute;
+      /*left: 0; bottom: 1.2em;
+       position tooltip like the native one */
+      left: 0;bottom: -30px;width: auto;white-space: nowrap;
+      background-color: #fff;
+      color: #333;
+      border: 1px solid #777;
+      padding: 3px 5px;
+      z-index: 99999;
+    }
+    abbr{text-decoration:none;display: inline-block;border-bottom: 1px dotted;}
+    details{border-radius:5px;padding:8px 12px;margin-bottom: 8px}
+    details summary:hover{cursor: pointer;}
+    details[open] summary{margin-bottom: 0.4em;}
+    details{border: 1px solid #bbb; background: #ddd;}
+
+    .dark-btn{margin-bottom: 16px;}
+    .dark-btn:after{content: '◐';}
+    @media screen and (max-width: 1000px){
+      #main .card{margin: 8px 0px;}
+      pre{white-space: pre-wrap;margin: 0;word-break: break-word;}
+    }
+    /*@media screen and (max-width: 62.5rem){
+      #main .card{margin: 8px 0px;}
+      pre{white-space: pre-wrap;margin: 0;word-break: break-word;}
+    }*/
+    @media screen and (min-width: 1008px){
+      #main{margin:0 auto; width:976px;max-width:976px;}
+      #main .card{margin: 8px 0;}
+      .dark-btn{position: absolute;right: 10px; top: 5px;margin-bottom: 0}
+    }
+    /*@media screen and (min-width: 63rem){
+      #main{margin:0 auto; max-width:61rem;}
+      #main .card{margin: 8px 0;}
+      .dark-btn{position: absolute;right: 0.6rem; top: 0.3rem;margin-bottom: 0}
+    }*/
+    a{
+      text-decoration: none; color: #145b94;display: inline-block; margin: 4px;
+    }
+    #up{
+      position: fixed; bottom: 3%; right: 3%; display: inline-block;
+      padding: 8px 12px; color: #000;background-color: #ddd;
+      border: 1px solid #BBBBBB;border-radius: 8px;
+    }
+    #main .card {
+      line-height: 1.56;
+      padding: 4px 8px;
+      border-radius: 5px;
+      border: 1px solid #bbb; background-color: #ddd;
+    }
+    #main .card a {margin: 6px 10px;}
+    .a{border: 2px solid green;}
+    pre, pre code{font: 13px 'Consolas', monospace;}
+    pre{border-radius: 3px; padding: 8px 12px; border: 1px solid #2E3238;
+      background-color: #BBBBBB;color: #000000;}
+    /* Тёмная цветовая схема: */
+    @media (prefers-color-scheme: dark) {
+      body { background-color: #080808; color: #ddd; }
+      img { filter: brightness(.8) contrast(1.2); }
+      a{color: #45abfd;display: inline-block; margin: 4px;}
+      #up{color: #DDD; background: #333;}
+      #main .card, details {border: 1px solid #222; background: #171717;}
+      pre{border: 1px solid #000; background-color: #262626;color: #ccc; }
+      code{
+        font-family: Menlo, Monaco, Consolas, "Courier New", Courier, monospace;
+        background-color: #262626;
+        color: #ddd;
+        border-radius: 4px;
+        overflow-wrap: break-word;
+        /*padding: 3px 6px;*/
+        white-space: break-spaces;
+      }
+      hr{border: 1px solid #777}
+    }
+    @media (prefers-color-scheme: light) {
+      pre{background-color: #282923; color: #F8F8F2}
+    }
+    .dark-btn{font-size:30px;cursor: pointer;display: inline-block;}
+    .light-mode {background-color: #fff; color: #000; }
+    .light-mode a{color: #145b94;}
+    .light-mode #main .card, .light-mode details{
+      border: 1px solid #BBBBBB; background: #DDDDDD;}
+    .light-mode pre{background-color: #BBBBBB;color: #000000;}
+    .dark-mode { background-color: #080808; color: #ddd; }
+    .dark-mode img { filter: brightness(.8) contrast(1.2); }
+    .dark-mode a{color: #45abfd;}
+    .dark-mode #nav a, .dark-mode #up{color: #DDDDDD; background: #333;}
+    .dark-mode #main .card, .dark-mode details{
+      border: 1px solid #222; background: #171717;}
+    .dark-mode pre{
+      border: 1px solid #000; background-color: #262626;color: #ccc; }
+    .dark-mode code{
+      font-family: Menlo, Monaco, Consolas, "Courier New", Courier, monospace;
+      background-color: #262626;
+      color: #ddd;
+      border-radius: 4px;
+      overflow-wrap: break-word;
+      /*padding: 3px 6px;*/
+      white-space: break-spaces;
+    }
+    .dark-mode hr{border: 1px solid #777}
+    @supports (accent-color: initial) {
+      /* Chrome 93, Edge 93, Firefox 92, Safari 15.4 */
+    }
+    /*
+    @supports (@media (prefers-reduced-data: reduce)){}
+    @supports (@media (prefers-reduced-data: no-preference)){}
+    */
+
+    /* Исправление для Браузеров, которые не поддерживают DETAILS: */
+    details{display: block;}
+
+    @supports not (--foo: red) {
+      /*
+        CSS-код для браузеров, у которых нет переменных
+         и которые поддерживают @supports:
+        Chrome 28, Firefox 22, Opera 12.1, Safari 9.
+      */
+    }
+    @supports (--foo: red) {
+      /*
+        CSS-код для браузеров, у которых есть переменные
+         и которые поддерживают @supports:
+        (Windows XP) Chrome 49, Firefox 31, Opera 36, Safari 10, Edge 16.
+      */
+      h1{font-size: 1.5rem;}
+    }
+
+    @supports (width: calc(1px + 1px)) {
+      /* CSS-код для браузеров, которые поддерживают @supports и calc() */
+    }
+    .italic{font-style: italic;}
+
+    /* Спойлер Prism:
+    @media screen and (min-width: 63rem){
+      code[class*=language-],
+      pre[class*=language-] { font-size: 0.98em !important;}
+    }
+    details summary{
+      z-index: 99999; border: 1px solid #333; border-radius: 5px;
+      padding: 8px 12px; background-color: #fff; cursor: pointer; }
+    details pre{
+      border: 1px solid; border-top: none; margin-top: -1px;
+      border-radius: 5px; padding: 8px 12px; }
+    */
+
+    /* MDN: */
+    .visually-hidden {
+      border: 0px !important;
+      clip: rect(1px, 1px, 1px, 1px) !important;
+      clip-path: inset(50%) !important;
+      height: 1px !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      padding: 0px !important;
+      position: absolute !important;
+      white-space: nowrap !important;
+      width: 1px !important;
+    }
+    /* Smashing Magazine: */
+    .visually-hidden2 {
+      clip: rect(0px, 0px, 0px, 0px);
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+    /* GoogleDev: */
+    [data-visually-hidden] {
+      opacity: 0 !important; pointer-events: none !important;
+      visibility: hidden !important;
+    }
+    .hidden, [data-hidden] { display: none !important; }
+    [data-render-hidden] { display: inline !important;
+      position: absolute !important; visibility: hidden !important;
+    }
+    /* CodePen: */
+    .visually-hidden3 {
+      border: 0;
+      clip: rect(0 0 0 0);
+      clip-path: polygon(0 0,0 0,0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+    /*
+    @supports (width: 1vw){
+      article h1{color: green}
+    }
+    @supports (width: 1cqh){
+      article p{font-family: 'OpenDyslexic',sans-serif;}
+    }
+    @supports(color: attr(data-color type(<color>), red)){
+      details{font-size: 0.9rem;}
+    }
+    @supports(color:if(style(--foo: 1px): black;else: red)){
+      details{font-family: 'OpenDyslexic',sans-serif;}
+    }
+    */
+  </style>
+  <!--
+  <link rel="stylesheet" href="JS/Prism_Code_Highlight/prism/prism-okadia.css"
+   data-noprefix />
+  -->
+</head>
+<body id="top" class="line-numbers">
+<span class="dark-btn" title="Сменить тему оформления" aria-hidden="true">
+  
+</span>
+<!-- Скрипт для сохранения цветовой темы: -->
+<script type="text/javascript">
+  var btn = document.querySelector(".dark-btn");
+  var prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+  var currentTheme = localStorage.getItem("theme");
+  if (currentTheme == "dark") {
+    document.body.classList.toggle("dark-mode");
+  } else if (currentTheme == "light") {
+    document.body.classList.toggle("light-mode");
+  }
+  btn.addEventListener("click", function() {
+    if (prefersDarkScheme.matches) {
+      document.body.classList.toggle("light-mode");
+      var theme =
+        document.body.classList.contains("light-mode") ? "light" : "dark";
+    } else {
+      document.body.classList.toggle("dark-mode");
+      var theme =
+        document.body.classList.contains("dark-mode") ? "dark" : "light";
+    }
+    localStorage.setItem("theme", theme);
+  });
+  /* Тест новых типов единиц размера:
+  function creatu(el) { return document.createElement(el); }
+  function units(unit) {
+    var el = creatu("dummy");
+    try {
+      el.style.width = unit; var test = el.style.width !== ""; return !!test;
+    } catch (err) { return false; } }
+  // Вот так - работает:
+  document.write('<span> &nbsp; rem: '+ units("1rem") +" &nbsp;</span> \r\n");
+  document.write('<span> &nbsp; vw: '+ units("1vw") +" &nbsp;</span>\r\n");
+  document.write('<span> &nbsp; cqw: '+ units("1cqw") +" &nbsp;</span>\r\n");
+  // А так - нет!
+  try{
+    document.write('<span> &nbsp; vw: '+
+      window.CSS.supports("width:1vw")+" &nbsp;</span>\r\n"
+    );
+    document.write('<span> &nbsp; cqw: '+
+      window.CSS.supports("width:1cqw")+" &nbsp;</span>\r\n"
+    );
+    // * Только в Chrome 133
+    document.write('<span> &nbsp; attr: '+
+      window.CSS.supports("color: attr(data-color type(<color>), red)")+" &nbsp;</span>\r\n"
+    );
+    // * Chrome 137, Opera 90
+    document.write('<span> &nbsp; if: '+
+      window.CSS.supports("color:if(style(--foo: 1px): black;else: red)")+
+      " &nbsp;</span>\r\n"
+    );
+  } catch(e){} // не поддерживает @supports.
+  */
+</script>
+
+<div id="main">
+
+  <article class="card">
+    <h1>Список-содержание:</h1>
+    <p>
+      <span>
+        Браузеры Chrome (старше чем v109) и Firefox (старше чем v115)
+         &mdash; меньше 2%</span>
+        <br /> Исключение: Safari (iOS v16.2 (ContainerQueries & Subgrid)
+         редко, v17.3.1 средне).
+    </p>
+    <hr />
+    <p>Для указания карты-источника (Sourcemap) в файле 
+      <b><i>MQ.min.js.map</i></b>
+     дописываем в конце путь к файлу-коду:</p>
+<pre>,"file":"MQ.min.js"&#125;
+</pre>
+      <p>а в конце файла-кода указываем путь к файлу карты:</p>
+<pre>JS: //# sourceMappingURL=MQ.min.js.map
+CSS: /*# sourceMappingURL=MQ.css.map */
+</pre>
+    <hr />
+    <p>ЗЫ: Можно использовать JavaScript для динамической смены цвета:
+<pre>/* задаём переменные с помощью JavaScript */
+var docElStyles = document.documentElement.style;
+docElStyles.setProperty('--hue', '260');
+docElStyles.setProperty('--base-saturation', '90%');
+docElStyles.setProperty('--base-lightness', '65%');</pre>
+    </p>
+    <p> Lozad: Chrome 51, Edge 15, Firefox 55, Opera 38, Safari 12.2.</p>
+    <br />
+    <div data-render-hidden>
+      <p>Это просто текст</p>
+    </div>
+  </article>
+<details>
+  <summary>Новые файлы:</summary>
+  <p>
+    <span style="font-weight:bold">
+      30 июня &mdash; 02 июля 2025года:
+    </span>
+    <br />
+    <a href="NewWeb/Отладка мобильной версии сайта по WI FI в браузере Mozilla Firefox.html">
+      Отладка мобильной версии сайта по WI FI в браузере Mozilla Firefox
+    </a><br />
+    <a href="NewWeb/A Detailed Guide On How To Use Firefox To Debug Web Issues In Android - DEV Community.html">
+      A Detailed Guide On How To Use Firefox To Debug Web Issues In Android - DEV Community
+    </a><br />
+    <a href="Saved/Poshta/New/">
+      Укрпошта ｜ Головна пошта країни
+    </a><br />
+    <a href="JS/New/">
+      Всё для аналитики: получение данных браузера
+    </a><br />
+    <a href="New_For_WebDev/_CSS/CSS nesting improves with CSSNestedDeclarations - web.dev.html">
+      CSS nesting improves with CSSNestedDeclarations - web.dev
+    </a><br />
+    <a href="New_For_WebDev/_CSS/CSSNestedDeclarations - Web APIs _ MDN.html">
+      CSSNestedDeclarations - Web APIs. MDN
+    </a><br />
+    <a href="New_For_WebDev/_CSS/@starting-style - CSS _ MDN.html">
+      @starting-style - CSS. MDN
+    </a><br />
+    <a href="NewWeb/JS and PHP regex multiline/"
+      title="Как разбить RegEx на несколько строчек в JS и PHP">
+        JS and PHP regex multiline
+    </a><br />
+    <a href="NewWeb/Firefox user agent string reference - HTTP _ MDN.html" title="window.navigator">
+      Firefox user agent string reference - HTTP. MDN
+    </a><br />
+    <br />
+    <span style="font-weight:bold">
+      27 &mdash; 28 июня 2025года:
+    </span>
+    <br />
+    <a href="New_For_WebDev/_CSS/Min Max Clamp/">
+      Папка про CSS clamp(), min(), max()
+    </a><br />
+    <a href="Newest/__Latest/Solutions to Replace the 12-Column Grid.html">
+      Solutions to Replace the 12-Column Grid ｜ Modern CSS Solutions
+    </a><br />
+    <br />
+    <span style="font-weight:bold">
+      20 июня 2025года:
+    </span>
+    <br />
+    <a href="New_For_WebDev/_CSS/Holy Albatros/" title="Почти container queries">
+      Understanding the Albatross
+    </a><br />
+  </p>
+</details>
+
+<details>
+  <summary> Возможности браузера MQ.js </summary>
+  <p>Определяет Браузер, тестирует некоторые его возможности +
+   Медиа запросы на JS:<br />
+    v4.3: Динамическое добавление разрешений экрана.<br />
+    v4.4: Динамическое добавление цвета.<br />
+  </p>
+  <a href="MediaQueries/mq4.html">Последняя версия (4.4)</a>
+</details>
+
+<details>
+  <summary> MHT в HTML </summary>
+    <p>
+      <abbr title="13:20 04.11.2024г &mdash; 16:59 09.01.2025г" 
+        data-title="13:20 04.11.2024г &mdash; 16:59 09.01.2025г"> ? </abbr>
+         &nbsp; &nbsp;
+      Конвертируем MHTML-файл в ОДНУ HTML-страницу с CSS и картинками (base64).
+      <br />
+      При конвертировании удаляет теги типа: link (rel и подобные).<br />
+      Автоматически вырезает теги STYLE и вставляет их после всего в конце HEAD.
+      <br />
+    </p><a href="Newest/_MHTML_to_HTML/">Newest/_MHTML_to_HTML/</a>
+</details>
+
+<details>
+  <summary> Аналитика (ip-api.com) </summary>
+    <p>Аналитика:</p>
+    <ul>
+      <li>
+        делает запрос к ip-api.com для определения страны/города посетителя,
+      </li>
+      <li>получает возможности браузера (feature detection),</li>
+      <li>отправляет всё через AJAX на сервер для обработки (PHP 5.2+),</li>
+      <li>а там уже в текстовый файл, CSV-таблицу или БД SQLite.</li>
+    </ul>
+    <p>В данный момент определяет такие возможности браузера: &nbsp;
+      <ul>
+        <li>название браузера, его версию</li>
+        <li>разрешение экрана, плотность пикселей (dpi)</li>
+        <li>разрешение окна браузера</li>
+        <li>операционную систему и её версию</li>
+        <li>локаль браузера</li>
+        <li>тип: пк / смартфон или планшет</li>
+        <li>тип экрана: сенсорный / обычный</li>
+        <li>cookies, LocalStorage, WebSQL, indexedDB</li>
+        <li>тёмный/светлый режим, акцентный цвет, Container Query,</li>
+        <li>CSS Starting Style Rule, CSS Nested Declarations,</li>
+        <li>Subgrid и navigator.userAgent.</li>
+      </ul>
+    </p>
+    <p>Текущие версии: </p>
+      <ul>
+      <li> v10 JSONP (27.4/6.2kb) &mdash; 
+        <i>Chrome 1, Opera 10, Firefox 2, Safari 5, IE 6</i>.</li>
+      <li> v11 navigator.sendBeacon или Fetch (14.2/4.6kb) &mdash; 
+        <i> Chrome 45, Opera 32, Firefox 40 и Safari 10.1 (10.3 iOS)</i>.</li>
+      <li> v12 <span title="данные передаются в открытом виде через GET!">
+        JSONP и Pixel</span> (28.4/5.6kb): &mdash; 
+        <i>Chrome 1, Opera 12, Firefox 2, Safari 5, IE 6</i>.</li>
+      </ul>
+    <a href="JS/Analytics/Analytics%20versions.txt">Подробный список версий</a>
+    <br />
+    <a href="JS/Analytics/">JS/Analytics/</a>
+</details>
+
+<details>
+  <summary> Аналитика с помощью img </summary>
+    <p>Отправка аналитики через изображение (pixel): <br />
+  &nbsp; &nbsp; + Работает даже на древних браузерах<br />
+  &nbsp; &nbsp; <span style="color:darkred;">
+    - Если картинки отключены, то аналитика не работает!</span><br />
+  &nbsp; &nbsp; - Отправка данных без ответа от сервера (через GET)<br />
+  &nbsp; &nbsp; - 8190 байт за одну отправку (из-за ограничений сервера)<br />
+  &nbsp; &nbsp; - необходимо проверять длинну URL<br />
+  Где строка <strong>{"abc":123,"def":"ghi"}</strong> превращается в <br />
+  &nbsp; &nbsp; <strong>%7B%22abc%22:123,%22def%22:%22ghi%22%7D</strong>
+   (увеличение на 69%).<br />
+    </p>
+    <ul>
+      <li>Chrome: ~ 100 KB </li>
+      <li>Firefox (3.x): &gt;= 5 MB </li>
+      <li>Firefox (recent): ~ 100 KB </li>
+      <li>Safari 4, 5: &gt;= 5 MB </li>
+      <li>Safari 13: ~ 64 KB </li>
+      <li>Mobile Safari 13: ~ 64 KB </li>
+      <li>Internet Explorer 6, 7: 2083 bytes </li>
+      <li>Internet Explorer 8, 9, 10, 11: &gt;= 5 MB </li>
+      <li>Edge (EdgeHTML 20-44): &gt;= 5 MB </li>
+      <li>Edge (Chromium 79+): ~ 100 KB </li>
+      <li>Opera (Presto &lt;= 12): &gt;= 5 MB </li>
+      <li>Opera (Chromium): ~ 100 KB </li>
+    </ul>
+  <a href="JS/Analytics/pixel/">JS/Analytics/pixel/</a>
+</details>
+
+<details>
+  <summary> Weppy.js: WebP для старых браузеров </summary>
+    <p>Weppy.js: WebP для старых браузеров.<br />
+      Chrome 7.0, Opera 10.62 и Firefox 4.0, IE10 (JPG fallback).<br />
+      <strong style="color:darkred;">ВНИМАНИЕ!<br />
+        Необходимо конвертировать изображение с помощью webpconv (ELF) на Linux.
+      </strong>
+    </p>
+    <a href="New_For_WebDev/Image-Types/Weppy.js%20-%20antimatter15">
+      New_For_WebDev/Image-Types/Weppy.js%20-%20antimatter15
+    </a>
+</details>
+
+<details>
+  <summary> SMOL css </summary>
+    <p>SMOL CSS - набор коротких кусков кода. Очень полезных!</p>
+    <a href="New_For_WebDev/SmolCSS.html">New_For_WebDev/SmolCSS.html</a>
+</details>
+
+<details>
+  <summary> Управляем картинками через client hints </summary>
+    <p>Автоматизируем выдачу изображений с помощью client hints (Apache).
+      <br />
+      То есть, получаем DPR и ширину экрана и поддерживаемый тип изображений.
+      <br />
+      <strong>Проверено: или примеры неправильные, или не работает.</strong>
+    </p>
+  <a href="New_For_WebDev/Automating resource selection with client hints.html">
+    Automating resource selection with client hints</a>
+</details>
+
+<details>
+  <summary> Save-Data (экономия траффика) </summary>
+    <p>Используем Save-Data для экономии траффика пользователей (Apache).<br />
+      Save-Data определяем с помощью JS (но лучше PHP):<br />
+      Не работает в OperaMini. Работает в Opera Android.
+    </p>
+    <a href="Newest/_Save-Data/">Newest/_Save-Data/</a>
+</details>
+
+<details>
+  <summary> WebP Apache </summary>
+    <p>Меняем изображение JPG/PNG на WEBP на стороне сервера с
+      Apache mod_rewrite, если поддерживает браузер.<br />
+      В папке должны быть файлы, например: <strong>1.jpg</strong> и
+        <strong>1.jpg.webp</strong><br />
+      Если картинка ниже - чёрная в зелёной рамке,
+        значит сервер поддерживает эту возможность.<br />
+    </p>
+    <img class="a" src="img/16g.png" width="16" height="16" alt="WebP test" />
+</details>
+
+<details>
+  <summary> Сжимаем JPG для retina </summary>
+    <p>Сжимаем JPEG изображения оптимально для retina-дисплеев. <br />
+      Кратко: Оптимально <strong>80%</strong> 1x для всех,
+       <strong>40%</strong> 2x для 1.5x и больше DPR.<br />
+      Например:<br />
+      <img src="img/Chrome-1x.jpg" width="128" height="128" title="128x128 7.54kb 80%" alt="80% for normal" /> 
+      <img src="img/Chrome-2x.jpg" width="128" height="128" title="256x256 7.74kb 47%" alt="40% for retina" />
+    </p>
+    <a href="New_For_WebDev/JPEG%20Compression_%20Is%2080%20the%20magic%20quality%20-%20Part%201%20-%20the%20retina%20screens%20-%20pieroxy.net.html">
+      JPEG Compression: Is 80 the magic quality - Part 1 - the retina screens - pieroxy.net
+    </a>
+</details>
+
+<details>
+  <summary> Защита получаемых данных в PHP </summary>
+    <p>Защита получаемых данных в PHP: экранирование HTML символов,
+     проверка на длинну строки и прочее...</p>
+    <a href="New_For_WebDev/PHPsecurity/">New_For_WebDev/PHPsecurity/</a>
+</details>
+
+<details>
+  <summary> Подсчёт процентов в PHP </summary>
+    <p>Подсчёт процентов в PHP.  И в SQLite БД (PHP 5.3)</p>
+    <a href="New_For_WebDev/PHP_count/">New_For_WebDev/PHP_count/</a>
+</details>
+
+<details>
+  <summary> Примеры работы с MySQLi </summary>
+    <p>Примеры работы с MySQLi БД</p>
+    <a href="New_For_WebDev/MySQLi/">New_For_WebDev/MySQLi/</a>
+</details>
+
+<details>
+  <summary> File(System)API (JS) </summary>
+    <p>JavaScript FileSystemAPI и
+      FileAPI для Chrome (Виртуальная Файловая Система).<br />
+      Создаём папки и файлы в оперативке или в папке профиля пользователя.
+      <br />
+      <strong>Нет никакого доступа к жесткому диску пользователя!</strong>
+    </p>
+    <a href="Newest/_FileAPI/">Newest/_FileAPI/</a>
+</details>
+
+<details>
+  <summary> Новое в CSS за 2022-2024 год </summary>
+    <p>Новое в CSS за 2022-2024 год и полезности:<br />
+    &nbsp;  &nbsp;  Cascade @layers (каскадные слои), CSS-свойства и<br />
+    &nbsp;  &nbsp;  @container queries (контейнерные запросы).<br />
+    &nbsp;  &nbsp;  color-mix(in srgb, blue, white); смешивание цветов.<br />
+    &nbsp;  &nbsp;  Техника Raven - на один шаг ближе к Container Queries.
+    </p>
+    <a href="New_For_WebDev/_CSS/">New_For_WebDev/_CSS/</a>
+</details>
+
+<details>
+  <summary> Сжимаем отправляемые по AJAX данные </summary>
+    <p>Сжимаем отправляемые по AJAX данные.<br />
+      43595 байт - Оригинал.<br />
+      11055 байт (+ 480 байт JS):   example-lzw2 работает.<br />
+      11055 байт (+ 481 байт JS):   example-lzw4 работает (код для сервера больше).<br />
+      21972 байт (+ 85000 байт JS): JSONC
+      &nbsp; &nbsp; но! работает только с base64.
+    </p>
+    <a href="New_For_WebDev/Compress/">New_For_WebDev/Compress/</a>
+</details>
+
+<details>
+  <summary> Получаем переменные из :root, указанные в CSS </summary>
+    <p>Получаем переменные из :root, указанные заранее в CSS.</p>
+    <p>
+      <a href="New_For_WebDev/javascript - Get an overview of all css variables set on root - Stack Overflow.htm">
+      javascript - Get an overview of all css variables set on root - Stack Overflow.htm</a>
+    </p>
+</details>
+
+<details>
+  <summary> Конвертер данных "Can i use" из JSON в HTML  </summary>
+    <p>Can i use?<br />
+      Парсит файл JSON и генерирует страницу HTML или выводит эту информацию через PHP.</p>
+    <p>
+      <a href="New_For_WebDev/Can_i_use/print_CaniUse.php">print_CaniUse.php</a> 
+      <a href="New_For_WebDev/Can_i_use/print_MDN.php">print_MDN.php</a><br />
+      <a href="New_For_WebDev/Can_i_use/CaniUse.html">CaniUse.html</a> 
+      <a href="New_For_WebDev/Can_i_use/MDN.html">MDN.html</a>
+    </p>
+</details>
+
+<details>
+  <summary> Mutation Event и Mutation Observer </summary>
+    <p>Mutation Event и Mutation Observer:<br />
+      Обрабатывает событие при изменении элемента на странице.
+    </p>
+    <p>Event: <strong>Chrome 4 (Opera 12.1), Edge 79, Safari 3.1 (3.2 iOS),
+        Firefox 2, IE 9</strong><br />
+      Observer: <strong>Chrome 18 (Opera 15), Edge 12, Safari 6.1 (13 iOS),
+        Firefox 14, IE 11</strong></p>
+    <a href="New_For_WebDev/Observer/">New_For_WebDev/Observer/</a>
+</details>
+
+<details>
+  <summary> Полный гайд по адаптивным изображениям </summary>
+    <p>Полный гайд по адаптивным изображениям. Типы изображений:</p>
+    <p>AVIF:      <strong>Chr 85 (Opr 71), Safari 16.4 (16.0 iOS),
+      Edg 121, FF 113</strong></p>
+    <p>HEIC/HEIF: <strong>Safari 17 (17.0 iOS)</strong></p>
+    <p>WebP:      <strong>Chr 32 (Opr 19), Safari 16.0 (14 iOS),
+      Edg 18, FF 65</strong></p>
+    <p>JPEG-XR:   <strong>Edg 11-18, IE 9-11</strong></p>
+    <p>JPEG-XL:   <strong>Safari 17.0 (17.0 iOS), (Chr 91 (Opr 77),
+      Edg 91, FF 90 = PC, with flags)</strong></p>
+    <p>JPEG-2000: <strong>Safari 5 (5 iOS) not Windows</strong></p>
+    <p>Тэг для отображения адаптивных изображений Picture: <br />
+      &nbsp; &nbsp; <strong>Chr 38 (Opr 25), Safari 9.1 (9.3 iOS),
+        Edg 13, FF 38</strong></p>
+<pre class="language-html line-numbers"><code>
+&lt;!-- Загружаем только нужный размер без тэга picture:
+При DPR &gt; 1.0 загрузится картинка побольше, поэтому советую подумать. --&gt;
+&lt;img decoding="async" src="img-1920.jpeg" 
+  srcset="img-640.jpg 640w, img-920.jpg 920w, img-1220.jpg 1220w" />
+
+&lt;!-- Поддержка новых форматов с фоллбэком: --&gt;
+&lt;picture>
+  &lt;source srcset="big.avif" type="image/avif" alt="34.6kb" />
+  &lt;source srcset="big.webp" type="image/webp" alt="64.1kb" />
+  &lt;source srcset="big.jxl" type="image/jxl" alt="47.7kb" />
+  &lt;img src="big.png" alt="73.3kb" />
+&lt;/picture>
+
+&lt;!-- Загружаем только нужный размер картинок в зависимости от размера экрана:
+При первом посещении картинка соответствует медиа-запросу.
+НО! при переворачивания экрана грузится картинка побольше. --&gt;
+&lt;picture>
+  &lt;source srcset="big_png8.png" width="1548" height="590" media="(max-width: 800px)" alt="34.7kb" />
+  &lt;source srcset="middle.png" width="1548" height="590" media="(max-width: 1200px)" alt="53.7kb" />
+  &lt;!-- Загружаем размер побольше, если плотность пикселей экрана 2: --&gt;
+  &lt;source srcset="middle.png 2x, big_png8.png" alt="53.7kb" />
+  &lt;!-- Загружаем обычную картинку, если браузер не поддерживает picture: --&gt;
+  &lt;img src="big.png" width="1548" height="590" alt="73.3kb">
+&lt;/picture>
+
+&lt;!-- Поддержка новых форматов видео с фоллбэком: --&gt;
+&lt;video controls width="250" height="200" muted>
+  &lt;source src="flower-large.webm" media="(min-width: 800px)" />
+  &lt;source src="flower.ogg" type="video/ogg" />
+  &lt;source src="flower.mov" type="video/quicktime" />
+  &lt;source src="flower.mp4" type="video/mp4" />
+  &lt;a href="flower.mp4">Скачать видео: цветок (MP4)&lt;/a>
+&lt;/video&gt;</code>
+</pre>
+<!--
+&lt;source srcset="big_500px.webp 1x, big_750px.webp 1.5x, big_1000px.webp 2x" type="image/webp" />
+&lt;!--
+&lt;source srcset="big.avif" type="image/avif" /&gt;
+&lt;source srcset="big.webp" type="image/webp" /&gt;
+&lt;source srcset="big.jp2" type="image/jp2" /&gt;
+&lt;img src="big.jxr" type="image/vnd.ms-photo" alt="JPEG-XR" /&gt;
+--&gt;
+-->
+<a href="New_For_WebDev/Image-Types/">New_For_WebDev/Image-Types/</a>
+</details>
+
+<details>
+  <summary> Полный гайд по центрированию </summary>
+    <p>Полный гайд по центрированию</p>
+    <a href="New_For_WebDev/A Complete Guide to Centering in CSS - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to Centering in CSS - CSS-Tricks
+    </a>
+</details>
+
+<details>
+  <summary> Полный гайд по Таблицам </summary>
+    <p>Полный гайд по Таблицам</p>
+    <a href="New_For_WebDev/A Complete Guide to the Table Element - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to the Table Element - CSS-Tricks
+    </a>
+</details>
+
+<details>
+  <summary> Полный гайд по SVG-фоллбэк </summary>
+    <p>Полный гайд по SVG-фоллбэк</p>
+    <a href="New_For_WebDev/A Complete Guide to SVG Fallbacks - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to SVG Fallbacks - CSS-Tricks
+    </a>
+</details>
+
+<details>
+  <summary> Полный гайд по data-* аттрибутам в CSS </summary>
+    <p>Полный гайд по data-* аттрибутам в CSS;<br />
+    data-attributes: как пользоваться, примеры.<br />
+      data-атрибуты (Opera 12, Firefox 6, Safari 5.1, Chrome 22, IE 11):<br />
+      Использование data-* атрибутов — валидный,
+        безопасный способ передачи пользовательских данных.<br />
+      Пожалуйста, примите во внимание, что мы можем не только читать,
+        но и изменять data-атрибуты.</p>
+  <a href="Newest/_Data-attr">Newest/_Data-attr/</a>
+</details>
+
+<details>
+  <summary> Полный гайд по кастомным свойствам в CSS </summary>
+    <p>Полный гайд по кастомным свойствам в CSS</p>
+    <!--<a href="New_For_WebDev/A Complete Guide to Custom Properties - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to Custom Properties - CSS-Tricks
+    </a>-->
+    <a href="New_For_WebDev/_CSS/CSS%20Custom%20Properties%20Guide%20-%20CSS-Tricks.html">
+      New_For_WebDev/_CSS/CSS%20Custom%20Properties%20Guide%20-%20CSS-Tricks.html
+    </a>
+</details>
+
+<details>
+  <summary> Полный гайд по градиентам в CSS </summary>
+    <p>Полный гайд по градиентам в CSS</p>
+    <a href="New_For_WebDev/A Complete Guide to CSS Gradients - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to CSS Gradients - CSS-Tricks
+    </a>
+</details>
+
+<details>
+  <summary> Полный гайд по функциям в CSS </summary>
+    <p>Полный гайд по функциям в CSS</p>
+    <a href="New_For_WebDev/A Complete Guide to CSS Functions - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to CSS Functions - CSS-Tricks</a>
+</details>
+
+<details>
+  <summary> Полный гайд по слоям в CSS </summary>
+    <p>Полный гайд по слоям в CSS</p>
+    <a href="New_For_WebDev/A Complete Guide to CSS Cascade Layers - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to CSS Cascade Layers - CSS-Tricks</a>
+</details>
+
+<details>
+  <summary> Полный гайд по calc() в CSS </summary>
+    <p>Полный гайд по calc() в CSS</p>
+    <a href="New_For_WebDev/A Complete Guide to calc() in CSS - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to calc() in CSS - CSS-Tricks
+    </a>
+</details>
+
+<details>
+  <summary> Полный гайд по тёмной теме в CSS </summary>
+    <p>Полный гайд по тёмной теме в CSS </p>
+    <p><strong>Chrome 76 (Opera62), Edge 79, Safari 12.1 (13 iOS),
+      Firefox 67</strong></p>
+    <a href="New_For_WebDev/A Complete Guide to Dark Mode on the Web - CSS-Tricks.html">
+      New_For_WebDev/A Complete Guide to Dark Mode on the Web - CSS-Tricks
+    </a><br />
+    <a href="New_For_WebDev/prefers-color-scheme media query - caniuse.com.png">
+      New_For_WebDev/prefers-color-scheme media query - caniuse.com
+    </a>
+</details>
+
+<details>
+  <summary> Светлая/Тёмная тема оформления страниц сайта </summary>
+    <p>Светлая/Тёмная тема оформления страниц сайта:</p>
+<pre class="language-css"><code>@media(prefers-color-scheme: dark){}
+@media(prefers-color-scheme: light){}
+/* уменьшаем контрастность изображений: */
+@media (prefers-color-scheme: dark) {
+  img { filter: brightness(.8) contrast(1.2); }
+}
+/* Предпочитаю управлять контрастом: */
+@media(prefers-contrast: more){}
+@media(prefers-contrast: less){}
+/* PS: предпочитаю уменьшить скорость анимации: */
+@media(prefers-reduced-motion: no-preference){}
+@media(prefers-reduced-motion: reduce){}
+/* предпочитаю меньше траффика(2022, не работает)
+@media (prefers-reduced-data: reduce) {}*/
+</code></pre>
+<pre class="language-js line-numbers"><code>
+console.log(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+var theme="";
+if(window.matchMedia('(prefers-color-scheme: dark)').matches === true){
+  theme = "dark";
+} // тёмный
+else {
+  //window.matchMedia('(prefers-color-scheme: light)').matches; // светлый
+  theme = "light";
+}
+// задаём атрибут: "цветовая схема" в теге html:
+document.querySelector(':root').setAttribute('color-scheme', theme);
+</code></pre>
+<pre class="language-html line-numbers"><code>&lt;picture>
+  &lt;!--Если цветовая схема тёмная: --&gt;
+  &lt;source srcset="photo_dark.png" media="(prefers-color-scheme: dark)">
+  &lt;!-- Если цветовая схема не задана или светлая: --&gt;
+  &lt;img src="photo_light.png">
+&lt;/picture>
+</code></pre>
+</details>
+
+<details>
+  <summary> Работа с кэшем в PHP: примеры </summary>
+    <p>Работа с кэшем в PHP: примеры</p>
+<br />
+<a href="Newest/_PHP/Increase site's speed by enable PHP code caching.html">
+  Newest/_PHP/Increase site's speed by enable PHP code caching.html
+</a>
+<a href="Newest/_PHP/url - 5-minute file cache in PHP - Stack Overflow.html">
+  Newest/_PHP/url - 5-minute file cache in PHP - Stack Overflow.html
+</a>
+<a href="Newest/_PHP/Кэширование в PHP.html">
+  Newest/_PHP/Кэширование в PHP.html
+</a>
+<a href="Newest/_PHP/PHP-File-Cache-master.zip">
+  Newest/_PHP/PHP-File-Cache-master.zip
+</a>
+</details>
+
+<details>
+  <summary> Работа с CSV-таблицами в PHP: библиотека, примеры </summary>
+    <p> Работа с CSV-таблицами в PHP: библиотека, примеры: </p>
+    <br />
+<a href="Newest/_PHP/CSV data manipulation made easy in PHP. - CSV.html">
+  Newest/_PHP/CSV data manipulation made easy in PHP. - CSV.html
+</a>
+<a href="Newest/_PHP/database - Parse large CSV file in a short time in PHP - Stack Overflow.html">
+  Newest/_PHP/database - Parse large CSV file in a short time in PHP - Stack Overflow.html
+</a>
+<a href="Newest/_PHP/How to Batch Import Huge CSV Fast using PHP (Million Records in Seconds) - Phppot.html">
+  Newest/_PHP/How to Batch Import Huge CSV Fast using PHP (Million Records in Seconds) - Phppot.html
+</a>
+<a href="Newest/_PHP/GitHub - thephpleague_csv_ CSV data manipulation made easy in PHP.html">
+  Newest/_PHP/GitHub - thephpleague_csv_ CSV data manipulation made easy in PHP.html
+</a><br />
+PHP v7.0.1: &nbsp; 
+<a href="Newest/_PHP/csv-9.0.0.zip">Newest/_PHP/csv-9.0.0.zip</a><br />
+PHP v8.1.2: &nbsp; 
+<a href="Newest/_PHP/csv-9.16.0.zip">Newest/_PHP/csv-9.16.0.zip</a>
+
+</details>
+
+<details>
+  <summary> Работа с массивами в PHP: получения данных, сортировка </summary>
+    <p>Работа с массивами в PHP: получение данных, сортировка</p>
+    <a href="Newest/_Array"> Newest/_Array </a>
+</details>
+
+<details>
+  <summary> Пример соединения с БД SQLite и получения данных </summary>
+  <p>Пример соединения с БД SQLite и получения данных</p>
+<pre>
+Newest/php-sqlite-example-master.zip
+</pre>
+</details>
+
+<details>
+  <summary> Диаграммы в SVG и Градиенте для аналитики </summary>
+    <p>Диаграммы в SVG и Градиенте для аналитики</p>
+    <a href="Newest/_DiagramAnalytics/"> Newest/_DiagramAnalytics/ </a>
+</details>
+
+<details>
+  <summary> W3Schools CSS и JS </summary>
+  <p>W3Schools CSS и JS: очередной клон Bootstrap.</p>
+<a href="Newest/W3.CSS Downloads.html">Newest/W3.CSS Downloads.html</a>
+<a href="Newest/w3.css">Newest/w3.css</a>
+<a href="Newest/w3.js">Newest/w3.js</a>
+
+</details>
+
+<details>
+  <summary> Что может "похерить" твой сайт </summary>
+  <p>Что может "похерить" твой сайт:</p>
+  <br />
+  <a href="Newest/WTF, HTML and CSS_.html">Newest/WTF, HTML and CSS_.html</a>
+</details>
+
+<details>
+  <summary> Своеобразный сброс стилей (CSS Reset) </summary>
+  <p>Своеобразный сброс стилей:</p>
+  <br>
+<a href="Newest/My CSS Reset_Base _ bitsofcode.html">
+  Newest/My CSS Reset_Base _ bitsofcode.html
+</a>
+<a href="Newest/base.scss">Newest/base.scss</a>
+
+</details>
+
+<details>
+  <summary> Отображаем Аббревиатуры на мобильных устройствах </summary>
+  <p>Отображаем Аббревиатуры на мобильных устройствах:</p>
+<pre>
+Newest/abbr-touch-master.zip
+Newest/Display abbr and acronym on mobile devices - Stack Overflow.mhtml
+Newest/Revisiting the abbr element _ bitsofcode.mhtml
+Newest/abbr-touch Makes abbr element title attributes touch accessible.mhtml
+</pre>
+</details>
+
+<details>
+  <summary> Журнал "Доктайп": Lazy-load,
+    атрибут srcset тега img (адаптивные изображения) </summary>
+  <p>Журнал "Доктайп":</p>
+<ul>
+  <li>тег &lt;details&gt;&lt;summary&gt;Заголовок&lt;/summary
+    &gt;Скрытый текст&lt;/details&gt; (раскрывающийся список)</li>
+  <li>Псевдокласс :link</li>
+  <li>Как сверстать доступный сайт</li>
+  <li>Какой формат выбрать - WebP, PNG или JPG</li>
+  <li>Что такое Lazy Loading и как его включить на сайте</li>
+  <li>Как использовать атрибут srcset тега img. Адаптивные изображения для чайников</li>
+</ul>
+<pre>
+Newest/_DoctypeJournal
+</pre>
+</details>
+
+<details>
+  <summary> Адаптивные изображения для чайников 
+    как корректно использовать атрибут srcset тега img </summary>
+    <p>Адаптивные изображения для чайников или
+     как корректно использовать атрибут srcset тега img</p>
+    <a href="Newest/Attribute_srcset-img_tag.html">
+      Newest/Attribute_srcset-img_tag.html
+    </a>
+</details>
+
+<details>
+  <summary> HTML и CSS ошибки, влияющие на доступность (c Ильёй, Части 1-8) </summary>
+    <p>HTML и CSS ошибки, влияющие на доступность.
+      Мой опыт и моего незрячего знакомого Ильи. Части 1-8</p>
+    <a href="Newest/_Accessibility/">Newest/_Accessibility/</a>
+</details>
+
+<details>
+  <summary> Поддержка &lt;img src="data...
+    для древних браузеров: IE6, IE7, Firefox 2 </summary>
+    <p>Поддержка &lt;img src="data... для древних браузеров:
+      IE6, IE7, Firefox 2</p>
+    <a href="Newest/_Data-URi/">Newest/_Data-URi/</a>
+</details>
+
+<details>
+  <summary> Список Эмодзи из таблицы UTF-8 для браузеров </summary>
+    <p>Список Эмодзи из таблицы UTF-8 для браузеров:</p>
+    <a href="Newest/_EMOJI/">Newest/_EMOJI/</a>
+</details>
+
+<details>
+  <summary> Ускоряем сайт (Yahoo best practices) </summary>
+    <p>Ускоряем сайт</p>
+    <a href="Newest/Best Practices for Speeding Up Your Web Site - Yahoo Developer Network.html">
+      Newest/Best Practices for Speeding Up Your Web Site - Yahoo Developer Network.html
+    </a>
+</details>
+
+<details>
+  <summary> Одно-файловые CMS (PHP) </summary>
+    <p>Одно-файловые CMS (PHP):</p>
+    <a href="Newest/fuzzy-cms-master.zip"> Newest/fuzzy-cms-master.zip </a>
+    <a href="Newest/OneFileCMS-master.zip"> Newest/OneFileCMS-master.zip </a>
+</details>
+
+<details>
+  <summary> "Ленивая" загрузка изображений (Lazy-loading) </summary>
+    <p>"Ленивая" загрузка изображений (Lazy-loading)</p>
+    <a href="Newest/_LazyLoad/">Newest/_LazyLoad/</a>
+</details>
+
+<details>
+  <summary> CSS Grid </summary>
+  <p>CSS Grids:</p>
+<pre>
+/* Grid: Chrome 58, Opera 44, Firefox 54(52), Safari 10.1 (10.3) */
+@supports(display: grid) {}
+@supports not (display: grid) {}
+</pre>
+<a href="Newest/_GRID/">Newest/_GRID/</a>
+</details>
+
+<details>
+  <summary> Flexbox </summary>
+  <p>Flexbox:</p>
+<pre>
+/* Flexbox: Chrome 29, Firefox 28, Safari 9, Opera 12.1 */
+@supports(display: flex) {}
+@supports not (display: flex) {}
+</pre>
+  <a href="Flexbox/">Flexbox/</a>
+</pre>
+</details>
+
+<details>
+  <summary> ServiceWorker, WebWorker и Cache </summary>
+  <p>ServiceWorker, WebWorker и Cache: <a href="Newest/_SW/">Newest/_SW</a></p>
+<!--
+Всё о сервисном работнике:
+Newest/_SW/Manifest File Format - Google Chrome.html
+Newest/_SW/Manifest file format - Chrome for Developers.html
+Разные примеры использования ServiceWorker:
+Newest/_SW/The offline cookbook - JakeArchibald.com.html
+Кратко о ServiceWorker и IndexedDB:
+  NewWeb/100 days
+Обмен сообщениями с помощью Promise для WebWorker и ServiceWorker:
+Newest/_SW/GitHub - nolanlawson_promise-worker_ Promise-based messaging for Web Workers and Service Workers.mhtml
+Псевдо-работник - Полифилл для WebWorker:
+Newest/_SW/GitHub - nolanlawson_pseudo-worker_ A tiny and mostly spec-compliant WebWorker polyfill.mhtml
+Лимиты хранилища Браузеров:
+  Browser storage limits and eviction criteria - Интерфейсы веб API MDN.htm
+-->
+</details>
+
+<details>
+  <summary> Хранение файлов и изображений в виде BLOB в БД indexedDB </summary>
+  <p>Хранение файлов и изображений в виде BLOB в БД indexedDB:</p>
+  <p>
+Идеально Работает через <br />
+&nbsp; &nbsp; AJAX (3kb, 1.17kb micro) Chrome 24, Edge 12, Opera 15,
+  Safari 10, Firefox 16, IE10<br />
+&nbsp; &nbsp; или Fetch (2.6kb, 1kb micro) Chrome 49, Opera 36,
+  Safari 10.3, Firefox 39.<br />
+&nbsp; &nbsp;<a href="Newest/_IDB/s60team_idb">Newest/_IDB/s60team_idb</a>
+<br /><br />
+Работает через fetch с помощью localForage (30kb)<br />
+&nbsp; &nbsp; Chrome 55, Edge 79, Opera 42, Safari 10.3, Firefox 66:<br />
+&nbsp; &nbsp;Newest/_IDB/localforage/example.html
+<br /><br />
+  Должно работать:<br />
+Newest/_IDB/Storing images and files in IndexedDB - Mozilla Hacks - the Web developer blog.htm<br />
+Newest/_IDB/Хранение изображений в оффлайн веб-приложении_ решения.mhtml<br />
+Newest/_IDB/How to store a Base64 encoded image into IndexedDB.mhtml<br />
+<br />
+  Не уверен:<br />
+Newest/_IDB/StoreFilesIn_indexedDB.txt<br />
+Newest/_IDB/indexedb-file-storage-main.zip<br />
+Newest/_IDB/IndexedDB storing and retrieving files · GitHub.mhtml<br />
+Newest/_IDB/javascript - How can I enable users to efficiently save the contents of an indexedDB object store to a file.mhtml<br />
+Newest/_IDB/javascript - Using IndexedDB to save images - Stack Overflow.mhtml<br />
+Newest/_IDB/StoringImages.txt<br />
+Newest/_IDB/How to use IndexedDB to store images and other files in your browser.mhtml<br />
+  </p>
+</details>
+
+<details>
+  <summary> Техника замещения изображения заглушкой с плохим качеством
+    </summary>
+  <p>Техника замещения изображения заглушкой с плохим качеством:</p>
+  <pre>
+Работает отлично:
+Newest/_LazyLoad/lazy.html
+  Работает криво:
+Newest/_ImgPlaceholder/
+</pre>
+</details>
+
+<details>
+  <summary> IndexedDB, WebSQL, LocalStorage – что блокирует DOM? (Nolan Lawson)
+    </summary>
+    <p>IndexedDB, WebSQL, LocalStorage – что блокирует DOM? (Nolan Lawson)</p>
+    <a href="Newest/New/Blocks the DOM.htm">Newest/New/Blocks the DOM.htm</a>
+</details>
+
+<details>
+  <summary> Application Cache API </summary>
+  <p>Application Cache API: Отладка AppCache</p>
+  <pre>
+Newest/_AppCache/Debugging HTML 5 Offline Application Cache _ Jonathan Stark.html
+Подробно об использовании AppCache:
+Newest/_AppCache/Application Cache API — новые возможности и проблемы _ Хабр.htm  
+Используем AppCache в приложении:
+Newest/_AppCache/gmail-for-mobile-html5-series-using.html
+Newest/_AppCache/gmail-for-mobile-html5-series-part-2.html
+Newest/_AppCache/Gmail for mobile HTML5 Series - Part 3_ Using AppCache to Launch Offline.html
+Пример приложения с FileAPI, AppCache и AJAX:
+Newest/_AppCache/an HTML5 offline image editor and uploader application - Mozilla.html
+</pre>
+</details>
+
+<details>
+  <summary> Медиа-запросы для устаревших браузеров: Respond.js </summary>
+    <p>Respond.js:</p>
+    <p>A fast & lightweight polyfill for min_max-width
+      CSS3 Media Queries (for IE 6-8, and more).<br />
+      Добавляет поддержку Медиа-запросов в старые браузеры.</p>
+      <a href="Newest/Respond.js.htm"> Newest/Respond.js </a>
+      <a href="Newest/Respond-1.4.2.zip"> Newest/Respond-1.4.2.zip </a>
+</details>
+
+<details>
+  <summary> CSS хак для правильного отображения элемента БЕЗ media-queries
+    </summary>
+  <p>Flex-grow 9999 Hack: <br />
+     CSS хак для правильного отображения элемента БЕЗ media-queries</p>
+  <a href="Newest/Flex-grow 9999 Hack.htm">Flex-grow 9999 Hack</a>
+  <pre>
+Было: [ А ][ В ]
+  Стало:
+      [ А ]
+      [ В ]
+</pre>
+</details>
+
+<details>
+  <summary> Альтернатива Медиа-запросам: Запросы элементов (Element Queries)
+   (пример использования). </summary>
+    <p>Альтернатива Медиа-запросам (Media Queries):
+      Запросы элементов (пример использования).</p>
+    <a href="Newest/_ElementQueries/Use Cases and Requirements for Element Queries.htm">
+      Element Queries with calc(), width, min-width and max-width
+    </a><br />
+    <a href="https://responsiveimagescg.github.io/cq-usecases/">
+      Container Queries: Use cases (internet)
+    </a>
+    <br />
+    <p>EQCSS is a CSS Reprocessor that introduces Element Queries, Scoped CSS,
+      <br />
+      a Parent selector, and responsive JavaScript to all browsers IE8 and up.
+    </p>
+    <p>Другой подход к отображению элементов на странице:<br />
+      вместо зависимости от ширины экрана Использует стили элементов.</p>
+      <a href="Newest/_ElementQueries/">_ElementQueries</a> &nbsp; 
+</details>
+
+<details>
+  <summary> localForage, TaffyDB, Dexie.js и IndexedDB Shim
+    (обёртки для indexedDB) </summary>
+    <p>localForage быстрая и простая библиотека хранилища:<br />
+    Улучшает оффлайн опыт Вашего Веб-приложения
+      используя Асинхронное хранилище (IndexedDB or WebSQL)<br />
+    с помощью простого, "localStorage"-подобного API.<br />
+    localForage использует localStorage в браузерах,
+      в которых нет поддержки IndexedDB или WebSQL.</p>
+    <a href="Newest/_IDB/localForage-1.10.0.zip">
+      Newest/_IDB/localForage-1.10.0.zip
+    </a>
+
+    <p>TaffyDB - An open-source library that brings database features
+      into your JavaScript applications.</p>
+    <p>Обёртка для удобства пользования indexedDB.</p>
+    <a href="Newest/_IDB/TaffyDB - The JavaScript Database.htm">
+      Newest/_IDB/TaffyDB - The JavaScript Database.htm
+    </a>
+    <a href="Newest/_IDB/TaffyDB - Beginner's Guide.htm"> 
+      Newest/_IDB/TaffyDB - Beginner's Guide.htm
+    </a>
+    <a href="Newest/_IDB/taffydb-master.zip">
+      Newest/_IDB/taffydb-master.zip
+    </a>
+
+    <p>Dexie.js is a wrapper library for indexedDB - 
+      the standard database in the browser.<br />
+    Очередная обёртка для удобства пользования indexedDB.</p>
+    <a href="Newest/_IDB/Dexie.js-4.0.1-rc.1.zip">
+      Newest/_IDB/Dexie.js-4.0.1-rc.1.zip
+    </a>
+    <a href="Newest/_IDB/Dexie.js-3.2.7.zip">
+      Newest/_IDB/Dexie.js-3.2.7.zip
+    </a>
+
+    <p>IndexedDB Shim: A polyfill for IndexedDB using WebSql<br />
+    Добавляет поддержку IndexedDB в браузеры, где есть WebSql.<br />
+    И в Node.js с помощью SQLite.</p>
+    <a href="Newest/_IDB/IDB_Shim.htm"> Newest/_IDB/IDB_Shim.htm </a>
+    <a href="Newest/_IDB/IndexedDBShim-main.zip">
+      Newest/_IDB/IndexedDBShim-main.zip
+    </a>
+</details>
+
+<details>
+  <summary> Исследование размера хранилищ данных мобильных браузеров </summary>
+    <p>Working with quota on mobile browsers:
+    A research report on browser storage by HTML5Rocks.<br />
+    Исследование размера хранилищ данных мобильных браузеров.</p>
+    <a href="Newest/Working with quota on mobile browsers.htm">
+      Newest/Working with quota on mobile browsers.htm
+    </a>
+</details>
+
+<details>
+  <summary> Удалённое выполнение скриптов в IFRAME </summary>
+    <p>Remote Scripting with IFRAME:<br />
+    Удалённое выполнение скриптов в IFRAME.<br />
+    (Фактически AJAX для старых браузеров. Используется и сейчас.)</p>
+    <a href="Newest/_RemoteScripting"> Newest/_RemoteScripting </a>
+</details>
+
+<details>
+  <summary> Протокол Open Graph: используется
+   для краткого описания сайта в поисковых системах и социальных сетях.
+ </summary>
+    <p>The Open Graph protocol:<br />
+    Используется для краткого описания сайта
+      (возможно, с изображением) и в поисковике.<br />
+    Также его использует Facebook.</p>
+    <a href="Newest/The Open Graph protocol.htm">
+      Newest/The Open Graph protocol.htm
+    </a>
+</details>
+
+<details>
+  <summary> Генератор изображений-заглушек </summary>
+    <p>Генератор изображений-заглушек с текстом размера.<br />
+    Доступны форматы: PNG 24bit, SVG, (JPEG и WebP с указанием качества).<br />
+    Изменён дизайн и код согласно Lighthouse.</p>
+    <a href="Newest/Placeholder image generator.htm">
+      Newest/Placeholder image generator.htm
+    </a>
+</details>
+
+<details>
+  <summary> Техника создания адаптивных электронных Писем без Медиа-запросов
+  </summary>
+    <p>The Fab Four technique to create 
+      Responsive Emails without Media Queries:<br />
+    Техника создания адаптивных электронных Писем без Медиа-запросов</p>
+    <a href="Newest/_TheFabFour"> Newest/_TheFabFour </a>
+</details>
+
+<details>
+  <summary> Web Starter Kit (Google) </summary>
+    <p>Web Starter Kit (Google):
+    Небольшая boilerplate для создания скоростного сайта-приложения.</p>
+    <a href="Newest/web-starter-kit-0.6.5.zip">
+      Newest/web-starter-kit-0.6.5.zip
+    </a>
+</details>
+
+<details>
+  <summary> vice-versa (Google): добавляет несколько
+    возможностей для старых Браузеров </summary>
+    <p>vice-versa (Google): добавляет несколько 
+      возможностей для старых Браузеров:<br />
+    Array.slice, Array.forEach, Array.prototype,<br />
+    setInterval и setTimeout с доп. аргументами, XMLHttpRequest<br />
+    Object.getPrototypeOf, Object.keys, Object.create, Array.isArray,<br />
+    String.prototype.trim, Function.prototype.bind<br />
+    для IE6</p>
+    <a href="Newest/vice-versa.0.1.4b.min.js"> Newest/vice-versa.0.1.4b.min.js </a>
+    <a href="Newest/vice-versa.txt"> Newest/vice-versa.txt </a>
+</details>
+
+<details>
+  <summary> navigator.sendBeacon: Отсылает аналитику, 
+    не блокируя основной поток (без статуса получения сервером) </summary>
+    <p>navigator.sendBeacon: Отсылает аналитику,<br />
+    не блокируя основной поток (без статуса получения сервером).<br />
+    (Chrome 39, Edge 14, Firefox 31, Opera 26, Safari 11.1, Safari iOS 11.3):
+    </p>
+    <a href="NewWeb/navigator.sendBeacon"> NewWeb/navigator.sendBeacon </a>
+</details>
+
+<details>
+  <summary> CORS: межсайтовые запросы (кратко) </summary>
+    <p>CORS: межсайтовые запросы (кратко):</p>
+    <a href="NewWeb/Cross-Origin_Resource_Sharing (CORS)">
+      NewWeb/Cross-Origin_Resource_Sharing (CORS)
+    </a>
+</details>
+
+<details>
+  <summary> Определение Браузера по navigator.userAgent:
+    Bowser и Platform.js (не используйте) </summary>
+    <p>Определение Браузера по navigator.userAgent: Bowser и Platform.js<br />
+    (Не рекомендуется, т.к. Браузеры уже давно умеют
+      подменять navigator.userAgent)</p>
+    <a href="NewWeb/Browser Detect"> NewWeb/Browser Detect </a>
+</details>
+
+<details>
+  <summary> Примеры AJAX и JSONP (для старых и новых браузеров) </summary>
+    <p>Примеры AJAX и JSONP (для старых и новых браузеров):</p>
+    <a href="NewWeb/AJAX_and_XHR/"> NewWeb/AJAX_and_XHR/ </a>
+</details>
+
+<details>
+  <summary> Хранилище данных (аналог LocalStorage)
+    для IE на Object, Flash и Cookies </summary>
+    <p>Хранилище данных (аналог LocalStorage)
+      для IE на Object, Flash и Cookies</p>
+    <a href="NewWeb/AJAX_and_XHR/PObject.js">
+      NewWeb/AJAX_and_XHR/PObject.js
+    </a>
+</details>
+
+<details>
+  <summary> Browserhacks </summary>
+    <p>Определение Браузера по особенностям и коду:</p>
+    <a href="Browser Hacks/">Browser Hacks</a>
+</details>
+
+<details>
+  <summary> Определение navigator.userAgentData (Chrome > 90) </summary>
+    <p>Определение navigator.userAgentData (Chrome > 90): <br />
+      <strong>Только HTTPS!</strong>
+    </p>
+    <a href="NewWeb/userAgentData.js"> NewWeb/userAgentData.js </a>
+</details>
+
+<details>
+  <summary> Работа с Базами Данных IndexedDB, WebSQL,
+    Cookies и LocalStorage </summary>
+    <p>Работа с Базами Данных IndexedDB, WebSQL, Cookies и LocalStorage: <br />
+      &nbsp; &nbsp; Создание и Добавление, Чтение и Удаление данных.
+    </p>
+    <p>
+      <b>Cookies (4кб или 300 записей):</b><br />
+        &nbsp; IE6: 20, IE8 50, Firefox 50, Opera 30 files, 4095 kb each
+        <br /><br />
+      <b>localStorage (5мб):</b><br />
+        &nbsp; IE8, Firefox 3.5, Chrome 5(4), Safari 4(3.1), 
+        Opera 10.5, Safari iOS 2, Android 2.<br /><br />
+      <b>WebSQL (5+ мб):</b><br />
+        &nbsp; Chrome 4-123, Opera 10.5-90, Safari 3.2-12.1.<br /><br />
+      <b>indexedDB (5+ мб):</b><br />
+        &nbsp; Chrome 24, Firefox 16, Opera 15, Safari 10, ~IE10.
+    </p>
+    <a href="Storage/"> Storage/ </a>
+</details>
+
+<details>
+  <summary> Асинхронная загрузка скриптов и стилей (Template Monster)
+  </summary>
+    <p>Асинхронная загрузка скриптов и стилей:</p>
+    <b style="color: darkred;">Не работает при отключенном JavaScript!</b>
+    <br />
+    <a href="Templates/templatemonster.html">
+      Templates/templatemonster.html
+    </a>
+</details>
+
+<details>
+  <summary> Автономное приложение из сайта с помощью
+    AppCache (файл .manifest) </summary>
+    <p>Автономное приложение из сайта с помощью AppCache (файл .manifest)<br />
+    (файл s60team.manifest), макс. размер: 5 мб.<br />
+    (IE—, FF 3.5-102, Chr 5-75, Safari 4, Opr 10.6,
+      Safari iOS 2.1, Android 2)<br />
+    Загрузит из сети всё, что не в кэше 
+      и покажет страницу offline, если файла нет.<br />
+    Можно указать версию для удобства обновления.</p>
+    <a href="App_Offline/">App_Offline</a>
+</details>
+
+<details>
+  <summary> Prism - подсветка кода </summary>
+    <p>Prism - подсветка кода:<br />
+    markup, css, javascript, autoit, autohotkey, c, c#, c++,<br />
+    coffeescript, ruby, haml, ini, jade, less, markdown, php, python,<br />
+    sass, scss, stylus и прочие...</p>
+    <a href="JS/Prism_Code_Highlight/"> JS/Prism_Code_Highlight/ </a>
+</details>
+
+<details>
+  <summary> Вертикальное центрирование текста </summary>
+    <p>Как расположить блок (с текстом) по центру вертикально:</p>
+    <a href="New Web/Vertically_centered/">New Web/Vertically_centered/</a>
+</details>
+
+<details>
+  <summary> W3.CSS Шаблон и фреймворк </summary>
+    <p>W3.CSS Шаблон и фреймворк:</p>
+    <a href="W3Schools/"> W3Schools/ </a>
+</details>
+
+<details>
+  <summary> Почти все свойства Flexbox без Flexbox </summary>
+    <p>Почти все свойства Flexbox без Flexbox:</p>
+    <a href="Flexbox/"> Flexbox/ </a>
+</details>
+
+<details>
+  <summary> Сетка на display:table (TableGrid) </summary>
+    <p>Быстрая и рабочая Сетка, основанная на display:table. <br />
+    Проверено и изменено. Работает отлично!</p>
+    <a href="Grids/Table Grid by mdo.htm">Table Grid by mdo</a>
+</details>
+
+<details>
+  <summary> Google Material Design Guide </summary>
+    <p>Google Material Design Guide: цвета, вид элементов и прочее...</p>
+    <a href="Google_Material_Design/">Google Material Design</a>
+</details>
+
+<details>
+  <summary> Google Accelerated Mobile Pages (AMP) </summary>
+    <p>Google Accelerated Mobile Pages (Скоростные страницы для смартфонов):
+      <br />
+    PS: Весит много. Смысла нет держать ещё одну версию сайта.</p>
+    <a href="Google_AMP/">Google AMP</a>
+</details>
+
+<details>
+  <summary> CSS Сброс и нормализация стилей элементов Браузера </summary>
+    <p>CSS Сброс и нормализация стилей элементов Браузера:</p>
+    <a href="CSS Reset/">CSS Reset</a>
+</details>
+
+<details>
+  <summary> LESS CSS (также есть JS версия) </summary>
+    <p>LESS расширяет CSS динамическими возможностями,
+    такими как переменные, примеси, операции и функции.</p>
+    <a href="Preprocessors/LESS_css.html">LESS CSS</a>
+    <a href="Preprocessors/less.js"> Preprocessors/less.js </a>
+</details>
+
+<details>
+  <summary> b64.exe </summary>
+    <p>Сжатие/Распаковка в формат base64:<br />
+      b64 -e -l 90000 in.png out.txt</p>
+      <a href="Others/b64.7z"> Others/b64.7z </a>
+</details>
+
+<details>
+  <summary> NWJS (Chromium Интерфейс для программ на Windows) </summary>
+    <p>NWJS (Chromium Интерфейс для программ на Windows)<br />
+    PS: Нет смысла, жрёт всю оперативку.</p>
+    <a href="NWJS/"> NWJS/ </a>
+</details>
+
+<details>
+  <summary> Сохранённые веб-страницы (файлы) </summary>
+    <p>Сохранённые веб-страницы (файлы):</p>
+    <p>(UkrPoshta), (ServiceWorker, Cache, JS Callbacks, Template Engines),<br />
+      (You Might Not Need jQuery), VK(Saved/VK),<br />
+      Using javascript to detect whether the url exists
+        before display in iframe - Stack Overflow</p>
+    <a href="Saved/"> Saved </a>
+</details>
+
+</div><!-- #main end. -->
+
+<a href="#top" id="up"aria-label="Перейти к началу страницы"> Вверх ▲ </a>
+<br />
+<!--<script type="text/javascript" src="JS/Prism_Code_Highlight/prism/prism-huge.min.js"></script>
+<script type="text/javascript" src="JS/Prism_Code_Highlight/prism/Line Numbers - Prism plugins_files/prism-line-numbers.js"></script>
+-->
+
+</body>
+</html>

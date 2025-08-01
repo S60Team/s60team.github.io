@@ -44,6 +44,15 @@
       }
     }
     document.getElementsByTagName('html')[0].setAttribute("class", touch());
+
+    var moz = '';
+    try{
+      if('MozAppearance' in document.documentElement.style === true ||
+         "mozInnerScreenX" in window){
+        moz = 'true';}
+      else{ moz = 'false'; }
+    } catch(e){ moz = 'false'; }
+    document.getElementsByTagName('html')[0].setAttribute('data-ff', moz);
   </script>
   <style type="text/css">
     /* spell-checker:disable */
@@ -341,6 +350,7 @@
       white-space: nowrap;
       width: 1px;
     }
+
     /*
     @supports (width: 1vw){
       article h1{color: green}
@@ -355,7 +365,25 @@
       details{font-family: 'OpenDyslexic',sans-serif;}
     }
     */
+
+    /* ::view-transition Chrome 109, Egde 109, Opera 95, Safari 18 */
+    @supports selector(::view-transition){article h1{color: dodgerblue;}}
+
+    /* Chrome 112, Egde 112, Opera 98, Safari 16, Firefox 115 
+    @supports(animation-composition:accumulate){
+      [data-ff="true"] article h1{color: green}
+    }*/
+
+    /* Only Firefox */
+    @supports(-moz-orient:block){
+      article h1{color: orangered;}
+    }
+    /* Only Firefox 115+ -moz-appearance:none or -moz-orient:block */
+    @supports(-moz-orient:block) and (animation-composition:accumulate){
+      article h1{color: orange;}
+    }
   </style>
+
   <!--
   <link rel="stylesheet" href="JS/Prism_Code_Highlight/prism/prism-okadia.css"
    data-noprefix />
@@ -452,6 +480,13 @@ docElStyles.setProperty('--base-lightness', '65%');</pre>
     <br />
     <div data-render-hidden>
       <p>Это просто текст</p>
+    </div>
+    <div>
+    <p><strong>Список дел:</strong></p>
+    <ul>
+      <li>Написать Progressive Web App с помощью ServiceWorker.</li>
+      <li>хранить текст, JS и CSS в indexedDB и lz-string.</li>
+    </ul>
     </div>
   </article>
 <details>
@@ -1144,7 +1179,10 @@ Newest/_DoctypeJournal
 
 <details>
   <summary> ServiceWorker, WebWorker и Cache </summary>
-  <p>ServiceWorker, WebWorker и Cache: <a href="Newest/_SW/">Newest/_SW</a></p>
+  <p>ServiceWorker, WebWorker и Cache: <a href="Newest/_SW/">Newest/_SW</a> <br />
+  <a href="NewWeb/100 days/1 - ServiceWorker/Introducing-the-Service-Worker.html">
+      NewWeb/100 days/1 - ServiceWorker/Introducing-the-Service-Worker.html</a>
+  </p>
 <!--
 Всё о сервисном работнике:
 Newest/_SW/Manifest File Format - Google Chrome.html

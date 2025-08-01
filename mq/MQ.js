@@ -9,7 +9,6 @@
   *  изменяет внешний вид страницы в зависимости от разрешения экрана и
   *  отображает на странице возможности Браузера.
 */
-// ToDo: пока не придумал...
 /*
   vw, vh, vmin, vmax: Edg16, FF19, Chr26, Saf6.1(8).
   cqw, cqh, cqi, cqb, cqmin, cqmax: FF110, Chr105, Saf16.
@@ -1659,11 +1658,6 @@ function MediaQ() {
     browserLogo = detect.Browser().name+" ";
   }
   // Выводим текст:
-  /*
-  try {isAVIFVar = localStorage.getItem('AVIF');}catch(e){isAVIFVar = 'nAviF';}
-  try {isWebpVar = localStorage.getItem('webp');}catch(e){isWebpVar = 'nWebP';}
-  try {avifVar = localStorage.getItem('avif');}catch(e){avifVar = 'nAviF';}
-  */
   // Picture, SrcSet, CSS Math: Clamp.
   var the_srcset = '', the_picture = '',clamp = '', es6i = '',
     cacheAPI = '', savesData = '';
@@ -1671,7 +1665,10 @@ function MediaQ() {
   else {the_srcset = 'nSrcSet';}
   if("HTMLPictureElement" in window){ the_picture = 'picture'; }
   else {the_picture = 'nPic';}
-  if('CSSMathClamp' in window){ clamp = "Clamp"; } else {clamp = "nClamp";}
+  // Chr79, Opr66, Edg79, Saf13.4, FF75
+  if('CSSMathClamp' in window || 
+    CSS.supports('width:clamp(10px,64px,80px)') === true){
+    clamp = "Clamp"; } else {clamp = "nClamp";}
   // Detect ES6 import:
   try {
     if('noModule' in HTMLScriptElement.prototype){es6i="ES6import";}
@@ -1683,7 +1680,7 @@ function MediaQ() {
     if (navigator.connection.saveData === true) {savesData = "saveData";}
     else { savesData = "noSaveData"; }
   } else { savesData = "noSaveData"; }
-  //
+  // Плотность пикселей дисплея:
   var pxRatio = '';
   if ("devicePixelRatio" in window){
     pxRatio = "  &nbsp;  |  &nbsp;  " +
@@ -1805,8 +1802,8 @@ function MediaQ() {
       'data-title=\"Prefers-reduced-data\">'+
       detect.isPrefersRData() +"</abbr> "+
     detect.isPrefersContrast() +" \r\n "+
-    '<abbr title=\"CSS Math: Clamp: Chr100, Opr86, Edg100, Saf16.4\" '+
-      'data-title=\"CSS Math: Clamp: Chr100, Opr86, Edg100, Saf16.4\">'+
+    '<abbr title=\"CSS Math: Clamp: Chr79, Opr66, Edg79, Saf13.4, FF75\" '+
+      'data-title=\"CSS Math: Clamp: Chr79, Opr66, Edg79, Saf13.4, FF75\">'+
       clamp +"</abbr> "+
     '<abbr title=\"Cascade layers: Chr99, Edg99, Saf15.4, FF97\" '+
       'data-title=\"Cascade layers: Chr99, Edg99, Saf15.4, FF97\">'+
@@ -1902,7 +1899,7 @@ function MediaQ() {
   // document.documentElement.style.toString();}catch(e){}
 
   
-
+  /* Working but disabled:
   try {
     var output = '';
     for (var property in document.documentElement.style) {
@@ -1913,6 +1910,7 @@ function MediaQ() {
     theText += "<details><summary>All inline css</summary><small>"+ output +
       "</small></details>\r\n";
   } catch(e){}
+  */
 
   // Добавляем в ID "mainInfo" предыдущий текст (свойства Браузера):
   mainInfo.innerHTML = theText;
